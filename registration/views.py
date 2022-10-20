@@ -10,9 +10,9 @@ import logging
 
 logger = telebot.logger
 
-bot = telebot.TeleBot("5696455466:AAH4ui4aHOInjRi20GcdGK4OTGcv12mAA88") # test token
+# bot = telebot.TeleBot("5696455466:AAH4ui4aHOInjRi20GcdGK4OTGcv12mAA88") # test token
 
-# bot = telebot.TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo") # simdroid main token
+bot = telebot.TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo") # simdroid main token
 
 @csrf_exempt
 def index(request):
@@ -30,7 +30,7 @@ def index(request):
 @bot.message_handler(commands=['start'])
 def greeting(message):  
     video = open('in.mp4', 'rb')
-    bot.send_message(message.from_user.id, '*Botdan osonroq foydalnish uchun quyidagi videoni ko\'ring*', parse_mode="Markdown")
+    bot.send_message(message.from_user.id, 'Botdan osonroq foydalnish uchun quyidagi videoni ko\'ring.\n\nWatch the video below for better experience of using the bot\n\nПосмотрите видео ниже, чтобы узнать больше о работе с ботом.')
     bot.send_video(message.from_user.id, video)
     
     if len(Client.objects.filter(user_id=message.from_user.id)) == 0:
@@ -47,7 +47,7 @@ def greeting(message):
     russian = types.KeyboardButton("🇷🇺 Russian")
     language_markup.add(uzbek, english, russian)
     bot.send_message(message.from_user.id,
-                  '*Iltimos kerakli tilni tanlang 🇬🇧:*\n', reply_markup=language_markup, parse_mode="Markdown")
+                  'Iltimos kerakli tilni tanlang.\n\nPlease choose the language.\n\nПожалуйста, выберите язык.', reply_markup=language_markup)
     
 
 
@@ -55,6 +55,21 @@ def greeting(message):
 def info(message):    
     bot.send_message(message.from_user.id,
                      '*Bot haqida ma\'lumot 📕*', parse_mode="Markdown")
+
+@bot.message_handler(commands=['help'])
+def help(message):    
+    bot.send_message(message.from_user.id,
+                     '*Botdan yordam oling*', parse_mode="Markdown")
+
+@bot.message_handler(commands=['lan'])
+def language(message):    
+    language_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
+    uzbek = types.KeyboardButton("🇺🇿 O'zbek")
+    english = types.KeyboardButton("🇬🇧 English")
+    russian = types.KeyboardButton("🇷🇺 Russian")
+    language_markup.add(uzbek, english, russian)
+    bot.send_message(message.from_user.id,
+                  'Iltimos kerakli tilni tanlang.\n\nPlease choose the language.\n\nПожалуйста, выберите язык.', reply_markup=language_markup)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['photo', 'text'] )
@@ -97,7 +112,7 @@ def register_view(message):
         bot.send_message(message.from_user.id, '*Меню:*', reply_markup=main_markup_russian, parse_mode="Markdown")
     
 
-    elif (message.text == 'Simkarta buyurtma berish 📦' or message.text == 'Заказать симкарту 📦'):  
+    elif (message.text == 'Simkarta buyurtma berish 📦' or message.text == 'Order simcard 📦' or message.text == 'Заказать симкарту 📦'):  
         order = SimOrder.objects.create(
             owner=client,
             sim_type=SimCardOption.objects.first(),
@@ -190,7 +205,7 @@ def register_view(message):
     
     elif (message.text == 'Mening buyurtmalarim 📄' or message.text == 'My orders 📄' or message.text == 'Мои заказы 📄'): # use callback query use loops to retrieve objects from database
         if lan == 'uz':
-                bot.send_message(message.from_user.id,
+            bot.send_message(message.from_user.id,
                               "Sizning buyurtmalaringiz:\n")
         elif lan == 'en':
             bot.send_message(message.from_user.id,
@@ -202,8 +217,16 @@ def register_view(message):
         if len(orders) != 0:
             for order in orders:
                 markup = types.InlineKeyboardMarkup(row_width=2)
-                markup.add( types.InlineKeyboardButton("O'chirish ❌", callback_data=f"{order.id}"))
-                bot.send_message(message.from_user.id, f"Buyurtma raqami:{order.id}\nIsm Familiyasi: {order.full_name}\nSim karta turi: {order.sim_type}\nSovg'a: {order.gift.name}\nManzil: {order.address}", reply_markup=markup)
+                if lan == "uz":
+                    markup.add(types.InlineKeyboardButton("O'chirish ❌", callback_data=f"{order.id}"))
+                    bot.send_message(message.from_user.id, f"Buyurtma raqami:{order.id}\nIsm Familiyasi: {order.full_name}\nSim karta turi: {order.sim_type}\nBonus sovg'a: {order.gift.name}\nManzil: {order.address}", reply_markup=markup)
+                elif lan == "en":
+                    markup.add(types.InlineKeyboardButton("Delete ❌", callback_data=f"{order.id}"))
+                    bot.send_message(message.from_user.id, f"Order id:{order.id}\nName: {order.full_name}\nSim card type: {order.sim_type}\nBonus gift: {order.gift.name}\nAddress: {order.address}", reply_markup=markup)
+                elif lan == "ru":
+                    markup.add(types.InlineKeyboardButton("Удалить ❌", callback_data=f"{order.id}"))
+                    bot.send_message(message.from_user.id, f"Номер заказа:{order.id}\nФИО: {order.full_name}\nТип сим-карты: {order.sim_type}\nБонусный подарок: {order.gift.name}\nАдрес: {order.address}", reply_markup=markup)
+
         else:
             if lan == 'uz':
                 bot.send_message(message.from_user.id,
