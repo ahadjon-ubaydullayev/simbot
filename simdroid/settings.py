@@ -27,7 +27,7 @@ SECRET_KEY = '2!@my1ta!2qq#rpt%rye#t&u4&my0p5(=m9wm#see(!&og$kyd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['02ba-95-214-210-192.ngrok.io', 'simbottest.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['simbottest.herokuapp.com', '02ba-95-214-210-192.ngrok.io', '127.0.0.1']
 
 
 
