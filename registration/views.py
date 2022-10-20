@@ -10,9 +10,9 @@ import logging
 
 logger = telebot.logger
 
-# bot = telebot.TeleBot("5696455466:AAH4ui4aHOInjRi20GcdGK4OTGcv12mAA88") # test token
+bot = telebot.TeleBot("5696455466:AAH4ui4aHOInjRi20GcdGK4OTGcv12mAA88") # test token
 
-bot = telebot.TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo") # simdroid main token
+# bot = telebot.TeleBot("5051960822:AAFyFKJFrybdVmRsrG3E1k3rCz3bVXFEYPo") # simdroid main token
 
 @csrf_exempt
 def index(request):
