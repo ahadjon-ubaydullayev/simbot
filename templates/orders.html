@@ -1,0 +1,302 @@
+{% extends 'navbar.html' %} 
+{% load static %} 
+{% block content %} 
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Total Orders</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"></h3>
+              </div>
+               
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-md-9" style="margin-bottom: 15px;">
+                            <div class="dt-buttons btn-group flex-wrap">
+                                <button class="btn btn-secondary buttons-copy buttons-html5"
+                                tabindex="0" aria-controls="example1" type="button">
+                                    <span>Copy</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
+                                    <span>CSV</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
+                                    <span>Excel</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
+                                    <span>PDF</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
+                                    <span>Print</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                               <input type="search" class="form-control form-control-sm" placeholder="Search" name="search">
+                           </div>
+                        </div>
+                    </div>   
+                <table id="example1" class="table table-bordered table-striped dataTable">
+                  <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Full name</th>
+                    <th>Phone number</th>
+                    <th>Address</th>
+                    <th>Sim type</th>
+                    <th>Status</th>
+                    <th>Gift</th>
+                    <th>Added Date</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for order in orders%}
+                    <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.full_name }}</td>
+                    <td>{{ order.tel_number }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{{ order.sim_type }}</td>
+                    <td>{{ order.order_status }}</td>
+                    <td>{{ order.gift }}
+                    <td>{{ order.added_date }}   
+                        <button style="margin-left: 5px;" class="btn btn-sm btn-outline-warning" data-toggle="modal" data-placement="top" data-target="#modal-lg"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#modal-default"><i class="fa fa-trash"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-default-message"><i class="fa fa-comment"></i></button>
+                    </td>
+                  </tr>
+                    {% endfor %}      
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Full name</th>
+                    <th>Phone number</th>
+                    <th>Address</th>
+                    <th>Sim type</th>
+                    <th>Status</th>
+                    <th>Gift</th>
+                    <th>Added Date</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+ 
+  <!-- /.content-wrapper -->
+  <!-- Edit modal -->
+    <div class="modal fade" id="modal-lg">  
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 style="text-align: justify;">Buyurtmani tahrirlash</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <form>
+                <div class="card-body">
+                  <div class="form-group">
+                      <label>Buyurtmachi</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option selected="selected"></option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Simkarta turi</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option selected="selected">1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="full_name">FISH</label>
+                        <input type="text" class="form-control" id="full_name" placeholder="Ism Familiya">
+                    </div>
+                     <div class="form-group">
+                      <label>Sovg'a turi</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option selected="selected">Headphone</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                        <option>1 oylik</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Yashash manzili</label>
+                        <input type="text" class="form-control" id="address" placeholder="Manzili">
+                    </div>
+                      <div class="form-group">
+                        <label for="exampleInputFile">Passport yoki ID karta rasmi (old qism)</label>
+                        <div class="input-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="front_picture">
+                            <label class="custom-file-label" for="front_picture">Choose file</label>
+                          </div>
+                          <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Passport yoki ID karta rasmi (orqa qism)</label>
+                        <div class="input-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="back_picture">
+                            <label class="custom-file-label" for="back_picture">Choose file</label>
+                          </div>
+                          <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Telefon raqami</label>
+                        <input type="text" class="form-control" id="phone_number" placeholder="Telefon raqami">
+                    </div> 
+                    <div class="form-group">
+                      <label>Buyurtma statusi</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <option selected="selected">active</option>
+                        <option>active</option>
+                        <option>pending</option>
+                        <option>delivered</option>
+                      </select>
+                    </div>    
+                </div>
+                <!-- /.card-body -->
+              </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- delete modal -->
+     <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Tasdiqlang</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Buyurtma o'chirilmoqda&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- message dialog -->
+      <div class="modal fade" id="modal-default-message">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Mijozga xabar yuborish </h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Xabar matnini kiriting&hellip;</p>
+              <div class="form-group">
+                      <label>Mijozni tanlang</label>
+                      <select class="form-control select2" style="width: 100%;">
+                        <!-- <option selected="selected">Headphone</option> -->
+                        <option>Mijoz 1</option>
+                        <option>Mijoz 2</option>
+                        <option>Mijoz 3</option>
+                        <option>Mijoz 4</option>
+                        <option>Mijoz 5</option>
+                        <option>Mijoz 6</option>
+                      </select>
+                </div>
+              <div class="form-group">
+                <label>Xabar matni</label>
+                <textarea class="form-control" rows="5" placeholder="Enter ..."></textarea>
+              </div>          
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+$(function(){
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+
+{% endblock %}
