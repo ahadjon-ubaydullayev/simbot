@@ -66,6 +66,7 @@ class SimOrder(models.Model):
     active_sim = models.BooleanField(default=False)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
     added_date = models.DateField(auto_now_add=True)
+    sim_cost = models.IntegerField()
 
     class  Meta:  
         verbose_name_plural = "Buyurtmalar"

@@ -49,6 +49,13 @@
                                <input type="search" class="form-control form-control-sm" placeholder="Search" name="search">
                            </div>
                         </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button class="btn btn-sm btn-primary col-md-12" data-toggle="modal" data-placement="top" data-target="#modal-lg-add">Add</button>
+                        
+                      </div>
                     </div>   
                 <table id="example1" class="table table-bordered table-striped dataTable">
                   <thead>
@@ -109,6 +116,103 @@
     <!-- /.content -->
  
   <!-- /.content-wrapper -->
+  <!-- add order modal -->
+    <div class="modal fade" id="modal-lg-add">  
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 style="text-align: justify;">Buyurtma qo'shish</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <form method="post">
+                {% csrf_token %}
+                <input type="hidden" id="add_order" name="action" value="add_order">
+                <div class="card-body">
+                  <div class="form-group">
+                      <label>Buyurtmachi</label>
+                      <select class="form-control select2" name="owner" id="owner" style="width: 100%;">
+                        {% for client in clients %}
+                        <option value="{{ client.id}}">{{client.first_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Simkarta turi</label>
+                      <select class="form-control select2" id="sim_type" name="sim_type" style="width: 100%;">
+                        {% for sim in sim_types%}
+                        <option value="{{sim.id}}">{{ sim.sim_option }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="full_name">FISH</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Ism Familiya">
+                    </div>
+                     <div class="form-group">
+                      <label>Sovg'a turi</label>
+                      <select class="form-control select2" id="gift" name="gift" style="width: 100%;">
+                        {% for gift in gifts %}
+                        <option value="{{gift.id}}">{{gift.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Yashash manzili</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Manzili">
+                    </div>
+                      <div class="form-group">
+                        <label for="exampleInputFile">Passport yoki ID karta rasmi (old qism)</label>
+                        <div class="input-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="id_picture" id="id_picture">
+                            <label class="custom-file-label" for="front_image">Choose file</label>
+                          </div>
+                          <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Passport yoki ID karta rasmi (orqa qism)</label>
+                        <div class="input-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="id_picture2" id="id_picture2">
+                            <label class="custom-file-label" for="back_picture">Choose file</label>
+                          </div>
+                          <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Telefon raqami</label>
+                        <input type="text" class="form-control" id="tel_number" name="tel_number" placeholder="Telefon raqami">
+                    </div> 
+                    <div class="form-group">
+                      <label>Buyurtma statusi</label>
+                      <select class="form-control select2" name="order_status" id='order_status' style="width: 100%;">
+                        {% for s in status %}
+                        <option value="{{s.id}}">{{s.status_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>    
+                </div>
+                <!-- /.card-body -->
+                <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="addOrder()">Add</button>
+            </div>
+              </form>
+            </div>
+            
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
   <!-- Edit modal -->
     <div class="modal fade" id="modal-lg">  
         <div class="modal-dialog modal-lg">
@@ -127,11 +231,7 @@
                       <select class="form-control select2" style="width: 100%;">
                         <option selected="selected"></option>
                         <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
+                        
                       </select>
                     </div>
                     <div class="form-group">
@@ -139,11 +239,7 @@
                       <select class="form-control select2" style="width: 100%;">
                         <option selected="selected">1 oylik</option>
                         <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
+                       
                       </select>
                     </div>
                     <div class="form-group">
@@ -155,11 +251,7 @@
                       <select class="form-control select2" style="width: 100%;">
                         <option selected="selected">Headphone</option>
                         <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
-                        <option>1 oylik</option>
+                       
                       </select>
                     </div>
                     <div class="form-group">
@@ -196,7 +288,7 @@
                     </div> 
                     <div class="form-group">
                       <label>Buyurtma statusi</label>
-                      <select class="form-control select2" style="width: 100%;">
+                      <select class="form-control select2" name="status" id='status' style="width: 100%;">
                         <option selected="selected">active</option>
                         <option>active</option>
                         <option>pending</option>
@@ -216,6 +308,7 @@
         </div>
         <!-- /.modal-dialog -->
       </div>
+
     <!-- delete modal -->
      <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
@@ -255,11 +348,7 @@
                       <select class="form-control select2" style="width: 100%;">
                         <!-- <option selected="selected">Headphone</option> -->
                         <option>Mijoz 1</option>
-                        <option>Mijoz 2</option>
-                        <option>Mijoz 3</option>
-                        <option>Mijoz 4</option>
-                        <option>Mijoz 5</option>
-                        <option>Mijoz 6</option>
+                       
                       </select>
                 </div>
               <div class="form-group">
@@ -277,6 +366,56 @@
         <!-- /.modal-dialog -->
       </div>
 <script>
+function addOrder(){
+  console.log("hello");
+    var owner = $('#owner').val();
+    var sim_type = $('#sim_type').val();
+    var full_name = $('#full_name').val();
+    var gift = $('#gift').val();
+    var address = $('#address').val();
+    var id_picture = $('#id_picture').val();
+    var id_picture2 = $('#id_picture2').val();
+    var tel_number = $('#tel_number').val();
+    var order_status = $('#order_status').val();
+    var add_order = $('#add_order').val();
+     window.location.href = '{% url "orders" %}';
+    $.ajax({
+          url: '/orders/',
+          type: 'POST',
+          data: {
+              add_order:add_order,
+              owner: owner,
+              sim_type: sim_type,
+              full_name: full_name,
+              gift:gift,
+              address:address,
+              id_picture:id_picture,
+              id_picture2:id_picture2,
+              tel_number:tel_number,
+              order_status:order_status,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+          dataType: 'json',
+          success: function (data) {
+            alert("Done");
+            textorder = '<tr>'+
+                                '<th scope="row">'+ data.id +'</th>'+
+                                '<td>'+ data.owner +'</td>'+
+                                '<td>'+ data.sim_type +'</td>'+
+                                '<td>'+ data.full_name +'</td>'+
+                                '<td>'+ data.gift +'</td>'+
+                                '<td>'+ data.address +'</td>'+
+                                '<td>'+ data.id_picture +'</td>'+
+                                '<td>'+ data.id_picture2 +'</td>'+
+                                '<td>'+ data.tel_number +'</td>'+
+                                '<td>'+ data.order_status +'</td>'+
+                            '</tr>';
+          }
+
+        });
+}
+
+
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
