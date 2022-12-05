@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'simboard',
     'registration',
 
 ]
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'simdroid.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,3 +134,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
     ]
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
