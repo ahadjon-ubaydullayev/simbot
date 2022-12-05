@@ -54,17 +54,17 @@ class Client(models.Model):
 
 
 class SimOrder(models.Model):
-    owner = models.ForeignKey(Client, on_delete=models.CASCADE)
-    sim_type = models.ForeignKey(SimCardOption, on_delete=models.CASCADE, related_name='sim_type')
+    owner = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='client')
+    sim_type = models.ForeignKey(SimCardOption, on_delete=models.CASCADE, related_name='sim_types')
     full_name = models.CharField(max_length=128)
-    gift = models.ForeignKey(Gift, on_delete=models.CASCADE, related_name="gift")
+    gift = models.ForeignKey(Gift, on_delete=models.CASCADE, related_name="gifts")
     address = models.CharField(max_length=100)
     id_picture = models.ImageField(upload_to='images', default='default.jpg')
     id_picture2 = models.ImageField(upload_to='images', default='default.jpg')
     tel_number = models.CharField(max_length=100)
     step = models.IntegerField(default=0)
     active_sim = models.BooleanField(default=False)
-    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, related_name='order_status')
     added_date = models.DateField(auto_now_add=True)
     sim_cost = models.IntegerField()
 
