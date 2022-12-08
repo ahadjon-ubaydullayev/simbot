@@ -7,6 +7,8 @@ import telebot
 from .models import SimCardOption, Gift, Client, SimOrder, OrderStatus
 from django.core.files.base import ContentFile
 import logging
+from django.views.generic import View
+from django.http import JsonResponse
 
 logger = telebot.logger
 
@@ -534,6 +536,52 @@ def cancel_func(message):
             bot.send_message(message.from_user.id, 'Enter your address🏠:', reply_markup=secordary_markup_e)
         elif lan == 'ru': 
             bot.send_message(message.from_user.id, 'Введите свой адрес🏠:', reply_markup=secordary_markup_r)
+
+
+
+# class SendMessage(View):
+
+#     def  get(self, request):
+#         owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
+#         message_text = request.GET.get('message_text', None)
+
+#         print(owner1, message_text)
+#         data = {
+#             'owner_id':owner1.first_name,
+#             'message_text':message_text
+#         }
+#         return JsonResponse(data)
+@bot.message_handler(func=lambda message: True, content_types=['text'] )
+def send_message(request):
+    if request.method == 'GET':
+        print('work')
+        owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
+        message_text = request.GET.get('message_text', None)
+        # message_picture = request.GET.get('message_picture', None)
+        data = {
+                'owner_id':owner1.first_name,
+                'message_text':message_text
+            }
+        print(data)
+        # if message_picture:
+        #     picture = open(message_picture, 'rb')
+        #     bot.send_photo(owner1.user_id, picture)
+        message_to_user = f"{message_text}"
+        bot.send_message(owner1.user_id, message_to_user,)
+        return JsonResponse(data)
+
+# @bot.message_handler(func=lambda message: True, content_types=['text'] )
+# def send_message(request, message):
+
+#     owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
+#     message_text = request.GET.get('message_text', None)
+
+#     data = {
+#             'owner_id':owner1.first_name,
+#             'message_text':message_text
+#         }
+#     return JsonResponse(data)
+#     bot.send_message(chat_id=from_user.user_id, text='USP-Python has started up!')
 
 bot.polling()
 

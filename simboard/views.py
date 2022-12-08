@@ -5,6 +5,7 @@ from django.template import RequestContext
 from datetime import datetime
 from django.views.generic import View, ListView
 from datetime import date
+import xlwt
 
 
 def dash(request):
@@ -57,7 +58,6 @@ class CreateOrder(View):
                     'order_status':obj.order_status.status_name,
                     'added_date':obj.added_date,
         }
-        print(order)
         data = {
             'order': order
         }
@@ -67,7 +67,6 @@ class CreateOrder(View):
 class UpdateOrder(View):
     def  get(self, request):
         id1 = request.GET.get('id', None)
-        print("order id: ", id1)
         owner1 = Client.objects.get(id=request.GET.get('owner', None))
         sim_type1 = SimCardOption.objects.get(id=request.GET.get('sim_type', None))
         full_name1 = request.GET.get('full_name', None)
@@ -78,7 +77,6 @@ class UpdateOrder(View):
         tel_number1 = request.GET.get('tel_number', None)
         order_status1 = OrderStatus.objects.get(id=request.GET.get('order_status', None))
         sim_cost1 = 155
-        print("details: ", id1, owner1, sim_type1, full_name1, gift1, address1, tel_number1, order_status1)
         obj = SimOrder.objects.get(id=id1)
         obj.id = id1
         obj.owner = owner1
@@ -103,7 +101,6 @@ class UpdateOrder(View):
                     'order_status':obj.order_status.status_name,
                     'added_date':obj.added_date
                     }
-        print("order: ", order)
         data = {
             'order': order
         }
@@ -126,9 +123,9 @@ def statistics(request):
 class DeleteOrder(View):
     def  get(self, request):
         id1 = request.GET.get('id', None)
-        print(id1)
         SimOrder.objects.get(id=id1).delete()
         data = {
             'deleted': True
         }
         return JsonResponse(data)
+
