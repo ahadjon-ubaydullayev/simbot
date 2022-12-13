@@ -52,7 +52,7 @@
                                 <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
                                     <span>CSV</span>
                                 </button> -->
-                                <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
+                                <!-- <button type="button" class="btn btn-secondary"  tabindex="0" aria-controls="example1">
                                    <a style="text-decoration: none; color: white;" href="{% url 'export_to_excel'%}"> <span> Excel</span></a>
                                 </button>
                                 <button type="button" class="btn btn-secondary buttons-pdf buttons-html5"  tabindex="0" aria-controls="example1">
@@ -60,24 +60,25 @@
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="PrintElem()" tabindex="0" aria-controls="example1">
                                     <span>Print</span>
-                                </button>
+                                </button> -->
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <div>
                                <input id="custom_searchbox" type="search" class="form-control form-control-sm" placeholder="Search" name="search">
                            </div>
-                        </div>
+                        </div> -->
 
                     </div>
-                    <div class="row">
+                   <div class="row">
                       <div class="col-md-12">
-                        <button class="btn btn-sm btn-primary col-md-12 waves-effect" data-toggle="modal" data-placement="top" data-target="#modal-lg-add">Add</button>
+                        <button style="margin-bottom: 20px;" class="btn btn-sm btn-primary col-md-12 waves-effect" data-toggle="modal" data-placement="top" data-target="#modal-lg-add">Add Order +</button>
                         
                       </div>
                     </div>  
 
                 <table id="orderTable" class="table table-bordered table-striped dataTable">
+                  
                   <thead>
                   <tr>
                     <th>Order ID</th>
@@ -98,10 +99,18 @@
                       <td class="orderFullName orderData" name="full_name">{{ order.full_name }}</td>
                       <td class="orderTelNumber orderData" name="tel_number">{{ order.tel_number }}</td>
                       <td class="orderAddress orderData" name="address">{{ order.address }}</td>
-                      <td class="orderSimType orderData" name="sim_type">{{ order.sim_type }}</td>
-                      <td class="orderStatus orderData" name="order_status">{{ order.order_status }}</td>
+                      <td class="orderSimType orderData" name="sim_type">{{ order.sim_type }}
+                        <input type="hidden" class="orderSimTypeId" name="" value="{{ order.sim_type.id }}">
+                      </td>
+                      <td class="orderStatus orderData" name="order_status">{{ order.order_status }}
+                        <input type="hidden" class="orderStatusId" value="{{ order.order_status.id }}" name="">
+                      </td>
                       <td class="orderGift orderData" name="gift">{{ order.gift }}
+                        <input type="hidden" class="orderGiftId" value="{{ order.gift.id }}" name="">
+                      </td>
                       <td class="orderAddedDate orderData" name="added_date">{{ order.added_date }}</td>
+            
+
                       <td width="150px">
                         <div class="buttons">
                           <button style="margin-left: 5px;" class="btn btn-sm btn-outline-warning" data-toggle="modal" data-placement="top" data-target="#modal-lg" onClick="editOrder({{order.id}})"><i class="fa fa-edit"></i></button>
@@ -152,12 +161,13 @@
               </button>
             </div>
             <div class="modal-body">
-               <form id="addOrder" action="">
+               <form id="addOrder" action="" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="row col-12">
                      <div class="form-group col-6">
                       <label>Buyurtmachi</label>
                       <select class="form-control select2" name="owner" id="owner" style="width: 100%;">
+                   <option class="selected" selected="">Tanlang...</option>
                         {% for client in clients %}
                         <option value="{{ client.id }}">{{ client.first_name }}</option>
                         {% endfor %}       
@@ -183,6 +193,7 @@
                     <div class="form-group col-6">
                       <label>Simkarta turi</label>
                       <select class="form-control select2" id="sim_type" name="sim_type" style="width: 100%;">
+                        <option class="selected" selected="">Tanlang...</option>
                         {% for sim in sim_types%}
                         <option value="{{sim.id}}">{{ sim.sim_option }}</option>
                         {% endfor %}
@@ -192,6 +203,7 @@
                     <div class="form-group col-6">
                       <label>Sovg'a turi</label>
                       <select class="form-control select2" id="gift" name="gift" style="width: 100%;">
+                        <option class="selected" selected="">Tanlang...</option>
                         {% for gift in gifts %}
                         <option value="{{gift.id}}">{{gift.name}}</option>
                         {% endfor %}
@@ -229,6 +241,7 @@
                     <div class="form-group col-6">
                       <label>Buyurtma statusi</label>
                       <select class="form-control select2" name="order_status" id='order_status' style="width: 100%;">
+
                         {% for s in status %}
                         <option value="{{s.id}}">{{s.status_name}}</option>
                         {% endfor %}
@@ -260,7 +273,7 @@
               </button>
             </div>
             <div class="modal-body">
-               <form id="updateOrder" action="">
+               <form id="updateOrder" action="" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="row col-12">
                     <div class="form-group col-6">
@@ -367,7 +380,7 @@
             </div>
             <div class="modal-body">
               <p>Xabar matnini kiriting&hellip;</p>
-              <form id="send_message">
+              <form id="send_message" enctype="multipart/form-data">
                
               <div class="form-group">
                       <label>Mijozni tanlang</label>
@@ -382,7 +395,7 @@
                 <label>Xabar matni</label>
                 <textarea id="message_text" class="form-control" rows="5" placeholder="Enter ..."></textarea>
               </div>
-<!--               <div class="input-group">
+                <div class="input-group">
                           <div class="custom-file">
                             <input type="file" class="custom-file-input" name="message_picture" id="message_picture">
                             <label class="custom-file-label" for="message_picture">Choose file</label>
@@ -390,7 +403,7 @@
                           <div class="input-group-append">
                             <span class="input-group-text">Upload</span>
                           </div>
-                </div>       -->    
+                </div>          
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -448,7 +461,7 @@ function addOrder() {
     let tel_number = $('#tel_number').val();
     let order_status = $('#order_status').val();
     // owner && sim_type && full_name && gift && address && id_picture && id_picture2 && tel_number && order_status
-    if (full_name && address ) {
+    if (sim_type && full_name && gift && address && tel_number && order_status) {
         // Create Ajax Call
         $.ajax({
             url: '{% url "order_create" %}',
@@ -484,7 +497,7 @@ function appendToUsrTable(order) {
         <tr id="order-${order.id}">
             <td class="orderId" name="id">${order.id}</td>
             <td class="orderFullName" name="full_name">${order.full_name}</td>
-            <td class="orderTelNumber" name="tel_number">'${order.tel_number}</td>
+            <td class="orderTelNumber" name="tel_number">${order.tel_number}</td>
             <td class="orderAddress" name="address">${order.address}</td>
             <td class="orderSimType" name="sim_type">${order.sim_type}</td>
             <td class="orderStatus" name="order_status">${order.order_status}</td>
@@ -512,7 +525,7 @@ function updateOrder() {
     let id_picture2 = $('#form-id_picture2').val();
     let tel_number = $('#form-tel_number').val();
     let order_status = $('#form-order_status').val();
-    if (full_name && address ) {
+    if (sim_type && full_name && gift && address && tel_number && order_status) {
         // Create Ajax Call
         $.ajax({
             url: '{% url "order_update" %}',
@@ -551,9 +564,9 @@ function editOrder(id) {
     fullName = $(tr_id).find(".orderFullName").text();
     telNumber = $(tr_id).find(".orderTelNumber").text();
     address = $(tr_id).find(".orderAddress").text();
-    simType = $(tr_id).find(".orderSimType").text();
-    status = $(tr_id).find(".orderStatus").text();
-    gift = $(tr_id).find(".orderGift").text();
+    simType = $(tr_id).find(".orderSimTypeId").val();
+    status = $(tr_id).find(".orderStatusId").val();
+    gift = $(tr_id).find(".orderGiftId").val();
     addedDate = $(tr_id).find(".orderAddedDate").text();
     // $('#form-owner').val(id);
     $('#form-id').val(id);
@@ -620,40 +633,34 @@ function deleteOrder(id) {
 $(function () {
     $("#orderTable").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#orderTable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
+       "paging": true,
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,
-      "responsive": true,
-    });
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
 
 
-function PrintElem(){
-    var divContents = $("#printable").html();//div which have to print
-    var printWindow = window.open('', '', 'height=700,width=1000');
-    printWindow.document.write('<html><head><title><h1> Total orders</h1> </title>');
-    printWindow.document.write('<link rel="stylesheet" media="print" href=\"{% static 'print.css' %}\" ');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(divContents);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    return true;
-}
+// function PrintElem(){
+//     var divContents = $("#printable").html();//div which have to print
+//     var printWindow = window.open('', '', 'height=700,width=1000');
+//     printWindow.document.write('<html><head><title><h1> Total orders</h1> </title>');
+//     printWindow.document.write('<link rel="stylesheet" media="print" href=\"{% static 'print.css' %}\" ');
+//     printWindow.document.write('</head><body>');
+//     printWindow.document.write(divContents);
+//     printWindow.document.write('</body></html>');
+//     printWindow.document.close();
+//     printWindow.focus();
+//     printWindow.print();
+//     return true;
+// }
 
 function sendMessage(){
     let owner_id = $('#owner_id').val();
     let message_text = $('#message_text').val();
-    // let message_picture = $('#message_picture').val();
-    console.log(owner_id);
-    console.log(message_text);
+    let message_picture = $('#message_picture').val();
      if (owner_id && message_text ) {
        
         $.ajax({
@@ -661,7 +668,7 @@ function sendMessage(){
             data: {
                 'owner_id':owner_id,
                 'message_text':message_text,
-                // 'message_picture':message_picture
+                'message_picture':message_picture
             },
             dataType: 'json',
             

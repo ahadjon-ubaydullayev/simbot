@@ -26,3 +26,8 @@ class SimCardOptionAdmin(admin.ModelAdmin):
 @admin.register(Gift)
 class GiftAdmin(admin.ModelAdmin):
     list_display = ['name']
+
+
+@admin.register(MessageToUser)
+class MessageToUserAdmin(admin.ModelAdmin):
+    pass

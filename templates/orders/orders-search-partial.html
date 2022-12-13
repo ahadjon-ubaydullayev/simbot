@@ -1,0 +1,55 @@
+{% load static %} 
+{% if orders %}
+
+<table id="orderTable" class="table table-bordered table-striped dataTable">
+                  <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Full name</th>
+                    <th>Phone number</th>
+                    <th>Address</th>
+                    <th>Sim type</th>
+                    <th>Status</th>
+                    <th>Gift</th>
+                    <th>Added Date</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody  id="table_body">
+                      {% for order in orders%}
+                      <tr id="order-{{order.id}}">
+                      <td class="orderId orderData" name="id">{{ order.id }}</td>
+                      <td class="orderFullName orderData" name="full_name">{{ order.full_name }}</td>
+                      <td class="orderTelNumber orderData" name="tel_number">{{ order.tel_number }}</td>
+                      <td class="orderAddress orderData" name="address">{{ order.address }}</td>
+                      <td class="orderSimType orderData" name="sim_type">{{ order.sim_type }}</td>
+                      <td class="orderStatus orderData" name="order_status">{{ order.order_status }}</td>
+                      <td class="orderGift orderData" name="gift">{{ order.gift }}
+                      <td class="orderAddedDate orderData" name="added_date">{{ order.added_date }}</td>
+                      <td width="150px">
+                        <div class="buttons">
+                          <button style="margin-left: 5px;" class="btn btn-sm btn-outline-warning" data-toggle="modal" data-placement="top" data-target="#modal-lg" onClick="editOrder({{order.id}})"><i class="fa fa-edit"></i></button>
+                          <button style="margin-left: 5px;" type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" onClick="deleteOrder({{order.id}})"><i class="fa fa-trash"></i></button>
+                          <button style="margin-left: 5px" type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modal-default-message"><i class="fa fa-comment"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}      
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Full name</th>
+                    <th>Phone number</th>
+                    <th>Address</th>
+                    <th>Sim type</th>
+                    <th>Status</th>
+                    <th>Gift</th>
+                    <th>Added Date</th>
+                    <th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
+{% else %}
+ <p>No orders found.</p>
+{% endif %}

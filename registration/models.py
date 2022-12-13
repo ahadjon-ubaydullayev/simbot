@@ -75,3 +75,5 @@ class SimOrder(models.Model):
         return("Buyurtmalar")
 
 
+class MessageToUser(models.Model):
+    message_picture = models.ImageField(upload_to='images/message/', default='default.jpg')

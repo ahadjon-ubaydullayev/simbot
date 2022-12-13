@@ -1,6 +1,6 @@
 from django.urls import path
 from registration.views import index, send_message
-from registration import views
+from registration import views 
 
 
 urlpatterns = [

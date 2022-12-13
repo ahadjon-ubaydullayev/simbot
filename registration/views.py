@@ -4,7 +4,7 @@ from telethon import TelegramClient, sync
 from pyrogram import *
 from telebot import *
 import telebot
-from .models import SimCardOption, Gift, Client, SimOrder, OrderStatus
+from .models import SimCardOption, Gift, Client, SimOrder, OrderStatus, MessageToUser
 from django.core.files.base import ContentFile
 import logging
 from django.views.generic import View
@@ -63,7 +63,7 @@ def help(message):
     bot.send_message(message.from_user.id,
                      '*Botdan yordam oling*', parse_mode="Markdown")
 
-@bot.message_handler(commands=['lan'])
+@bot.message_handler(commands=['language'])
 def language(message):    
     language_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
     uzbek = types.KeyboardButton("🇺🇿 O'zbek")
@@ -77,7 +77,7 @@ def language(message):
 @bot.message_handler(func=lambda message: True, content_types=['photo', 'text'] )
 def register_view(message):
     client = Client.objects.get(user_id=message.from_user.id)
-
+    user_commands = ['Simkarta buyurtma berish 📦', 'Mening buyurtmalarim 📄', 'Linephone 📱','Ma\'lumot olish📕']
     main_markup_uzbek = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     btn1_u = types.KeyboardButton('Simkarta buyurtma berish 📦')
     btn2_u = types.KeyboardButton('Mening buyurtmalarim 📄')
@@ -164,7 +164,6 @@ def register_view(message):
     
     elif message.text == 'Bekor qilish 🚫':
         order = SimOrder.objects.filter(owner=client, active_sim=True).last()
-        print(order)
         order.delete()
         
         bot.send_message(message.from_user.id,
@@ -213,11 +212,17 @@ def register_view(message):
         if len(orders) != 0:
             if lan == 'uz':
                 bot.send_message(message.from_user.id,
+                              f"Sizda jami {len(orders)} ta buyurtma mavjud.\n")
+                bot.send_message(message.from_user.id,
                               "Sizning buyurtmalaringiz:\n")
             elif lan == 'en':
                 bot.send_message(message.from_user.id,
+                              f"You have {len(orders)} orders.\n")
+                bot.send_message(message.from_user.id,
                               "Your orders:\n")
             elif lan == 'ru':
+                bot.send_message(message.from_user.id,
+                              f"У вас есть {len(orders)} заказа.\n")
                 bot.send_message(message.from_user.id,
                                   "Ваши заказы:\n")    
             for order in orders:
@@ -243,6 +248,7 @@ def register_view(message):
                 bot.send_message(message.from_user.id,
                               "*У вас еще нет заказов.*\n", reply_markup=main_markup_russian, parse_mode="Markdown")
     else:
+        
         order = SimOrder.objects.filter(owner=client, active_sim=True).first()
         
         secordary_markup_u = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -315,8 +321,8 @@ def register_view(message):
                         message.from_user.id, 'Введите свой номер телефона, как показано: 9x xxx xx xx☎️:', reply_markup=secordary_markup_r)
 
         elif order.step == 3: 
-            obj = SimCardOption.objects.filter(sim_option=message.text).first()
-            order.sim_option = obj
+            obj = SimCardOption.objects.get(sim_option=message.text)
+            order.sim_type = obj
             order.step += 1
             order.save()
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
@@ -338,7 +344,6 @@ def register_view(message):
     
         elif order.step == 4: 
             obj = Gift.objects.get(name=message.text)
-            print("sovga:  ", obj)
             order.gift = obj
             order.step += 1
             order.save()
@@ -539,49 +544,31 @@ def cancel_func(message):
 
 
 
-# class SendMessage(View):
-
-#     def  get(self, request):
-#         owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
-#         message_text = request.GET.get('message_text', None)
-
-#         print(owner1, message_text)
-#         data = {
-#             'owner_id':owner1.first_name,
-#             'message_text':message_text
-#         }
-#         return JsonResponse(data)
 @bot.message_handler(func=lambda message: True, content_types=['text'] )
 def send_message(request):
     if request.method == 'GET':
         print('work')
         owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
         message_text = request.GET.get('message_text', None)
-        # message_picture = request.GET.get('message_picture', None)
+        message_picture = request.GET.get('message_picture', None)
+        obj = MessageToUser.objects.create(
+            message_picture=message_picture)
+        obj.save()
         data = {
                 'owner_id':owner1.first_name,
                 'message_text':message_text
             }
+        message_pic_from_model = obj.message_picture
+        print("picture",message_pic_from_model.url)
         print(data)
+        print(message_text)
         # if message_picture:
         #     picture = open(message_picture, 'rb')
         #     bot.send_photo(owner1.user_id, picture)
         message_to_user = f"{message_text}"
-        bot.send_message(owner1.user_id, message_to_user,)
+        bot.send_message(owner1.user_id, message_to_user)
         return JsonResponse(data)
 
-# @bot.message_handler(func=lambda message: True, content_types=['text'] )
-# def send_message(request, message):
-
-#     owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
-#     message_text = request.GET.get('message_text', None)
-
-#     data = {
-#             'owner_id':owner1.first_name,
-#             'message_text':message_text
-#         }
-#     return JsonResponse(data)
-#     bot.send_message(chat_id=from_user.user_id, text='USP-Python has started up!')
 
 bot.polling()
 
