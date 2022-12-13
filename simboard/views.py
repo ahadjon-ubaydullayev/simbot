@@ -131,6 +131,9 @@ def month(obj, year=True, day=False):
             for i in range(1, this_day + 1):
                 res.append(obj.objects.filter(added_date__year=this_year, added_date__month=this_month, added_date__day=1).count())
             return res
+        elif (day == False) and (year == False):
+            for i in range(1, this_day + 1):
+                res.append(obj.objects.filter(added_date__year=this_year, added_date__month=this_month, added_date__day=i).count())
         else:
             for i in range(1, 13):
                 res.append(obj.objects.filter(added_date__year=last_year, added_date__month=i).count())
@@ -150,15 +153,45 @@ def month(obj, year=True, day=False):
             return res
 
 
+def monthly_orders(obj):
+    this_year = datetime.today().year
+    this_month = datetime.today().month
+    this_day = datetime.today().day
+    res = []
+    res = obj.objects.filter(added_date__year=this_year, added_date__month=this_month).count()
+    return res
+
+def daily_income(obj):
+    res = 0
+    daily_orders = obj.objects.filter(added_date=date.today())
+    for order in daily_orders:
+        res += order.sim_cost
+    return res
+
+def monthly_income(obj):
+    this_year = datetime.today().year
+    this_month = datetime.today().month
+    this_day = datetime.today().day
+    res = 0
+    orders = obj.objects.filter(added_date__year=this_year, added_date__month=this_month)
+    for order in orders:
+        res += order.sim_cost
+    return res 
+
 def statistics(request):
     orders = SimOrder.objects.all()
     daily_orders = SimOrder.objects.filter(added_date=date.today()).count()
+    daily_money = daily_income(SimOrder)
     client_year = month(Client)
     client_l_year = month(Client, year=False)
     client_l_day = month(Client, year=False, day=True)
     order_year = month(SimOrder)
+    order_monthly = monthly_orders(SimOrder)
     order_l_year = month(SimOrder, year=False)
     order_l_day = month(SimOrder, year=False, day=True)
+    monthly_money = monthly_income(SimOrder)
+    delivered_orders = SimOrder.objects.filter(order_status=3).count()
+    clients = Client.objects.all().count()
     moths = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'August', 'Sept', 'Oct', 'Nov', 'Dec']
     days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
     return render(request, 'statistics.html', {
@@ -169,9 +202,15 @@ def statistics(request):
         'this_year': client_year,
         'order_daily': order_l_day,
         'this_year_order': order_year,
+        'order_l_day':order_l_day,
         'day': days,
         'moths': moths,
-        'client_l_day': client_l_day
+        'client_l_day': client_l_day,
+        'order_monthly':order_monthly,
+        'daily_money':daily_money,
+        'monthly_money':monthly_money,
+        'delivered_orders':delivered_orders,
+        'clients':clients
         })
 
 

@@ -547,7 +547,6 @@ def cancel_func(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'] )
 def send_message(request):
     if request.method == 'GET':
-        print('work')
         owner1 = Client.objects.get(id=request.GET.get('owner_id', None))
         message_text = request.GET.get('message_text', None)
         message_picture = request.GET.get('message_picture', None)
@@ -559,9 +558,6 @@ def send_message(request):
                 'message_text':message_text
             }
         message_pic_from_model = obj.message_picture
-        print("picture",message_pic_from_model.url)
-        print(data)
-        print(message_text)
         # if message_picture:
         #     picture = open(message_picture, 'rb')
         #     bot.send_photo(owner1.user_id, picture)
