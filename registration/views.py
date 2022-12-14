@@ -558,6 +558,8 @@ def send_message(request):
                 'message_text':message_text
             }
         message_pic_from_model = obj.message_picture
+        print("work")
+        print(message_pic_from_model)
         # if message_picture:
         #     picture = open(message_picture, 'rb')
         #     bot.send_photo(owner1.user_id, picture)
